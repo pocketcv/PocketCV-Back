@@ -1,9 +1,10 @@
 import express from "express";
-import dotenv from "dotenv";
 import cors from "cors";
+import dotenv from "dotenv";
 import AuthRoutes from "./routes/AuthRoutes.js";
 import MessageRoutes from "./routes/MessageRoutes.js";
 import { Server } from "socket.io";
+import { createServer } from "http";
 
 dotenv.config();
 const app = express();
@@ -11,107 +12,158 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use("/uploads/recordings", express.static("uploads/recordings"));
-app.use("/uploads/images/", express.static("uploads/images"));
+// Serve static files from tmp directory
+app.use("/tmp/recordings", express.static("tmp/recordings"));
+app.use("/tmp/images", express.static("tmp/images"));
+app.use("/tmp/resumes", express.static("tmp/resumes"));
 
 app.get("/", (req, res) => {
-  return res.json({
-    success: true,
-    message: "Welcome to PocketCV"
-  })
-})
+  try {
+    return res.json({
+      success: true,
+      message: "Welcome to PocketCV"
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error"
+    });
+  }
+});
 
 app.use("/api/auth/", AuthRoutes);
 app.use("/api/messages", MessageRoutes);
 
-const server = app.listen(process.env.PORT, () => {
-  console.log(`server started on port ${process.env.PORT}`);
-});
+const server = createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: process.env.CLIENT_URL,
     credentials: true,
   },
 });
 
 global.onlineUsers = new Map();
+
 io.on("connection", (socket) => {
   global.chatSocket = socket;
   socket.on("add-user", (userId) => {
-    onlineUsers.set(userId, socket.id);
-    socket.broadcast.emit("online-users", {
-      onlineUsers: Array.from(onlineUsers.keys()),
-    });
+    try {
+      onlineUsers.set(userId, socket.id);
+      socket.broadcast.emit("online-users", {
+        onlineUsers: Array.from(onlineUsers.keys()),
+      });
+    } catch (error) {
+      console.error(error);
+    }
   });
 
   socket.on("signout", (id) => {
-    onlineUsers.delete(id);
-    socket.broadcast.emit("online-users", {
-      onlineUsers: Array.from(onlineUsers.keys()),
-    });
+    try {
+      onlineUsers.delete(id);
+      socket.broadcast.emit("online-users", {
+        onlineUsers: Array.from(onlineUsers.keys()),
+      });
+    } catch (error) {
+      console.error(error);
+    }
   });
 
   socket.on("outgoing-voice-call", (data) => {
-    const sendUserSocket = onlineUsers.get(data.to);
-    if (sendUserSocket) {
-      socket.to(sendUserSocket).emit("incoming-voice-call", {
-        from: data.from,
-        roomId: data.roomId,
-        callType: data.callType,
-      });
-    } else {
-      const senderSocket = onlineUsers.get(data.from);
-      socket.to(senderSocket).emit("voice-call-offline");
+    try {
+      const sendUserSocket = onlineUsers.get(data.to);
+      if (sendUserSocket) {
+        socket.to(sendUserSocket).emit("incoming-voice-call", {
+          from: data.from,
+          roomId: data.roomId,
+          callType: data.callType,
+        });
+      } else {
+        const senderSocket = onlineUsers.get(data.from);
+        socket.to(senderSocket).emit("voice-call-offline");
+      }
+    } catch (error) {
+      console.error(error);
     }
   });
 
   socket.on("reject-voice-call", (data) => {
-    const sendUserSocket = onlineUsers.get(data.from);
-    if (sendUserSocket) {
-      socket.to(sendUserSocket).emit("voice-call-rejected");
+    try {
+      const sendUserSocket = onlineUsers.get(data.from);
+      if (sendUserSocket) {
+        socket.to(sendUserSocket).emit("voice-call-rejected");
+      }
+    } catch (error) {
+      console.error(error);
     }
   });
 
   socket.on("outgoing-video-call", (data) => {
-    const sendUserSocket = onlineUsers.get(data.to);
-    if (sendUserSocket) {
-      socket.to(sendUserSocket).emit("incoming-video-call", {
-        from: data.from,
-        roomId: data.roomId,
-        callType: data.callType,
-      });
-    } else {
-      const senderSocket = onlineUsers.get(data.from);
-      socket.to(senderSocket).emit("video-call-offline");
+    try {
+      const sendUserSocket = onlineUsers.get(data.to);
+      if (sendUserSocket) {
+        socket.to(sendUserSocket).emit("incoming-video-call", {
+          from: data.from,
+          roomId: data.roomId,
+          callType: data.callType,
+        });
+      } else {
+        const senderSocket = onlineUsers.get(data.from);
+        socket.to(senderSocket).emit("video-call-offline");
+      }
+    } catch (error) {
+      console.error(error);
     }
   });
 
   socket.on("accept-incoming-call", ({ id }) => {
-    const sendUserSocket = onlineUsers.get(id);
-    socket.to(sendUserSocket).emit("accept-call");
+    try {
+      const sendUserSocket = onlineUsers.get(id);
+      socket.to(sendUserSocket).emit("accept-call");
+    } catch (error) {
+      console.error(error);
+    }
   });
 
   socket.on("reject-video-call", (data) => {
-    const sendUserSocket = onlineUsers.get(data.from);
-    if (sendUserSocket) {
-      socket.to(sendUserSocket).emit("video-call-rejected");
+    try {
+      const sendUserSocket = onlineUsers.get(data.from);
+      if (sendUserSocket) {
+        socket.to(sendUserSocket).emit("video-call-rejected");
+      }
+    } catch (error) {
+      console.error(error);
     }
   });
 
   socket.on("send-msg", (data) => {
-    const sendUserSocket = onlineUsers.get(data.to);
-    if (sendUserSocket) {
-      socket
-        .to(sendUserSocket)
-        .emit("msg-recieve", { from: data.from, message: data.message });
+    try {
+      const sendUserSocket = onlineUsers.get(data.to);
+      if (sendUserSocket) {
+        socket.to(sendUserSocket).emit("msg-receive", {
+          from: data.from,
+          message: data.message,
+        });
+      }
+    } catch (error) {
+      console.error(error);
     }
   });
 
   socket.on("mark-read", ({ id, recieverId }) => {
-    const sendUserSocket = onlineUsers.get(id);
-    if (sendUserSocket) {
-      socket.to(sendUserSocket).emit("mark-read-recieve", { id, recieverId });
+    try {
+      const sendUserSocket = onlineUsers.get(id);
+      if (sendUserSocket) {
+        socket.to(sendUserSocket).emit("mark-read-recieve", { id, recieverId });
+      }
+    } catch (error) {
+      console.error(error);
     }
   });
+});
+
+const port = process.env.PORT || 3005;
+server.listen(port, () => {
+  console.log(`Server running on port ${port}`);
 });
