@@ -16,6 +16,13 @@ app.use(express.json());
 // Routes
 app.use('/api/resumes', resumeRoutes);
 
+app.get("/", (req, res) => {
+  return res.json({
+    success: true,
+    message: "Welcome to PocketCV"
+  })
+})
+
 // Error handling middleware
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   if (err instanceof multer.MulterError) {

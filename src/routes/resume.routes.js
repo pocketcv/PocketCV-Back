@@ -8,7 +8,7 @@ const router = express.Router();
 // Configure multer for PDF storage
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadDir = 'uploads/resumes';
+    const uploadDir = 'tmp/resumes';
     // Create directory if it doesn't exist
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });
@@ -60,7 +60,7 @@ router.post('/upload', upload.single('resume'), (req, res) => {
 
 // Get list of all resumes
 router.get('/list', (req, res) => {
-  const uploadDir = 'uploads/resumes';
+  const uploadDir = 'tmp/resumes';
   
   try {
     if (!fs.existsSync(uploadDir)) {
@@ -84,7 +84,7 @@ router.get('/list', (req, res) => {
 // Download/read specific resume
 router.get('/:filename', (req, res) => {
   const { filename } = req.params;
-  const filePath = path.join('uploads/resumes', filename);
+  const filePath = path.join('tmp/resumes', filename);
 
   try {
     if (!fs.existsSync(filePath)) {
@@ -100,7 +100,7 @@ router.get('/:filename', (req, res) => {
 // Delete resume
 router.delete('/:filename', (req, res) => {
   const { filename } = req.params;
-  const filePath = path.join('uploads/resumes', filename);
+  const filePath = path.join('tmp/resumes', filename);
 
   try {
     if (!fs.existsSync(filePath)) {

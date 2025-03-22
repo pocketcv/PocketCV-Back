@@ -8,8 +8,8 @@ import {
 } from "../controllers/MessageController.js";
 import multer from "multer";
 
-const upload = multer({ dest: "uploads/recordings/" });
-const uploadImage = multer({ dest: "uploads/images/" });
+const upload = multer({ dest: "tmp/recordings/" });
+const uploadImage = multer({ dest: "tmp/images/" });
 
 const router = Router();
 

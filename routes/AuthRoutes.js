@@ -13,7 +13,7 @@ const router = Router();
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads/resumes/");
+    cb(null, "tmp/resumes/");
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
