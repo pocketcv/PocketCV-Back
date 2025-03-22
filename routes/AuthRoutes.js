@@ -11,16 +11,16 @@ import {
 } from "../controllers/AuthController.js";
 
 // Ensure tmp directories exist
-const tmpDir = "/tmp";
-const resumesDir = `${tmpDir}/resumes`;
+// const tmpDir = "/tmp";
+// const resumesDir = `${tmpDir}/resumes`;
 
-try {
-  if (!existsSync(resumesDir)) {
-    mkdirSync(resumesDir, { recursive: true });
-  }
-} catch (error) {
-  console.warn("Warning: Could not create tmp directories", error);
-}
+// try {
+//   if (!existsSync(resumesDir)) {
+//     mkdirSync(resumesDir, { recursive: true });
+//   }
+// } catch (error) {
+//   console.warn("Warning: Could not create tmp directories", error);
+// }
 
 // const storage = multer.diskStorage({
 //   destination: (req, file, cb) => {
