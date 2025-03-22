@@ -5,7 +5,7 @@ import {
   addImageMessage,
   addAudioMessage,
   getInitialContactsWithMessages,
-  markMessageAsRead,
+  // markMessageAsRead,
 } from "../controllers/MessageController.js";
 import multer from "multer";
 import { existsSync, mkdirSync } from "fs";
@@ -36,6 +36,6 @@ router.get("/get-messages/:from/:to", getMessages);
 router.post("/add-image-message", uploadImage.single("image"), addImageMessage);
 router.post("/add-audio-message", upload.single("audio"), addAudioMessage);
 router.get("/get-initial-contacts/:from", getInitialContactsWithMessages);
-router.post("/mark-message-as-read", markMessageAsRead);
+// router.post("/mark-message-as-read", markMessageAsRead);
 
 export default router;
