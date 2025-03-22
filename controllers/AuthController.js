@@ -5,15 +5,15 @@ export const checkUser = async (request, response, next) => {
   try {
     const { email } = request.body;
     if (!email) {
-      return response.json({ msg: "Email is required", status: false });
+      return response.json({ message: "Email is required", status: false });
     }
     const prisma = getPrismaInstance();
     const user = await prisma.user.findUnique({ where: { email } });
 
     if (!user) {
-      return response.json({ msg: "User not found", status: false });
+      return response.json({ message: "User not found", status: false });
     } else
-      return response.json({ msg: "User Found", status: true, data: user });
+      return response.json({ message: "User Found", status: true, data: user });
   } catch (error) {
     return response.json({
       success: false,
@@ -34,14 +34,14 @@ export const onBoardUser = async (request, response, next) => {
     } = request.body;
     if (!email || !name || !profilePicture) {
       return response.json({
-        msg: "Email, Name and Image are required",
+        message: "Email, Name and Image are required",
       });
     } else {
       const prisma = getPrismaInstance();
       await prisma.user.create({
         data: { email, name, about, profilePicture, resume: request?.file?.filename },
       });
-      return response.json({ msg: "Success", status: true });
+      return response.json({ message: "Success", status: true });
     }
   } catch (error) {
     // next(error);
@@ -63,7 +63,7 @@ export const registerUser = async (request, response, next) => {
       about = "Available",
     } = request.body;
 
-    if (!email || !name || !phoneNumber || !userType) {
+    if (!email || !name) {
       return response.json({
         message: "Fields are required",
       });
