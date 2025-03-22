@@ -12,10 +12,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Serve static files from tmp directory
-app.use("/tmp/recordings", express.static("tmp/recordings"));
-app.use("/tmp/images", express.static("tmp/images"));
-app.use("/tmp/resumes", express.static("tmp/resumes"));
+// Serve static files from tmp directory in /tmp
+app.use("/files/recordings", express.static("/tmp/recordings"));
+app.use("/files/images", express.static("/tmp/images"));
+app.use("/files/resumes", express.static("/tmp/resumes"));
 
 app.get("/", (req, res) => {
   try {

@@ -1,5 +1,6 @@
 import { Router } from "express";
 import multer from "multer";
+import { existsSync, mkdirSync } from "fs";
 import path from "path";
 import {
   checkUser,
@@ -9,19 +10,31 @@ import {
   registerUser,
 } from "../controllers/AuthController.js";
 
-const router = Router();
+// Ensure tmp directories exist
+const tmpDir = "/tmp";
+const resumesDir = `${tmpDir}/resumes`;
+
+try {
+  if (!existsSync(resumesDir)) {
+    mkdirSync(resumesDir, { recursive: true });
+  }
+} catch (error) {
+  console.warn("Warning: Could not create tmp directories", error);
+}
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "tmp/resumes/");
+    cb(null, resumesDir);
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-    cb(null, `${uniqueSuffix}-${file.originalname}`);
+    cb(null, uniqueSuffix + "-" + file.originalname);
   },
 });
 
 const upload = multer({ storage });
+
+const router = Router();
 
 router.post("/check-user", checkUser);
 router.post("/onBoardUser", upload.single("resume"), onBoardUser);
