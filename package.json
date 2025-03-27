@@ -2,9 +2,11 @@
   "type": "module",
   "scripts": {
     "start": "nodemon index.js",
-    "prisma": "prisma generate"
+    "prisma": "prisma generate",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.0",
     "@prisma/client": "^5.22.0",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",

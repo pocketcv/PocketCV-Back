@@ -5,6 +5,7 @@ import {
   addImageMessage,
   addAudioMessage,
   getInitialContactsWithMessages,
+  askGeminAI,
   // markMessageAsRead,
 } from "../controllers/MessageController.js";
 import multer from "multer";
@@ -36,6 +37,7 @@ router.get("/get-messages/:from/:to", getMessages);
 router.post("/add-image-message", addImageMessage);
 router.post("/add-audio-message", addAudioMessage);
 router.get("/get-initial-contacts/:from", getInitialContactsWithMessages);
+router.post("/ask-gemini", askGeminAI);
 // router.post("/mark-message-as-read", markMessageAsRead);
 
 export default router;

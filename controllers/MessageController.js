@@ -1,5 +1,9 @@
 import { renameSync } from "fs";
 import getPrismaInstance from "../utils/PrismaClient.js";
+import dotenv from "dotenv";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
+dotenv.config();
 
 export const getMessages = async (req, res, next) => {
   try {
@@ -217,4 +221,36 @@ export const addImageMessage = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+};
+
+const gemini_api_key = process.env.GEMINI_API_KEY;
+const googleAi = new GoogleGenerativeAI(gemini_api_key);
+
+const geminiConfig = {
+  temperature: 0.9,
+  topP: 1,
+  topK: 1,
+  maxOutputTokens: 4096,
+};
+
+const geminiModel = googleAi.getGenerativeModel({
+  model: "models/gemini-1.5-pro",
+  geminiConfig,
+});
+
+export const askGeminAI = async (req, res, next) => {
+  try {
+    const prompt = req.body.prompt;
+    
+    const result = await geminiModel.generateContent({
+      contents: [{ role: "user", parts: [{ text: prompt }] }],
+    });
+
+    const responseText = result.response.text();
+
+    res.json({ response: responseText });
+  } catch (error) {
+    console.error("Gemini API Error:", error);
+    next(error);
+  }
 };
