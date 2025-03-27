@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import AuthRoutes from "./routes/AuthRoutes.js";
 import MessageRoutes from "./routes/MessageRoutes.js";
+import ResumeRoutes from "./routes/ResumeRoutes.js";
 import { Server } from "socket.io";
 import { createServer } from "http";
 
@@ -32,8 +33,10 @@ app.get("/", (req, res) => {
   }
 });
 
-app.use("/api/auth/", AuthRoutes);
+// Routes
+app.use("/api/auth", AuthRoutes);
 app.use("/api/messages", MessageRoutes);
+app.use("/api/resume", ResumeRoutes);
 
 const server = createServer(app);
 

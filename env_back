@@ -1,0 +1,22 @@
+PORT=9001
+
+# Database Connectivity
+DATABASE_URL="postgresql://postgres:admin@localhost:5432/job?schema=public"
+
+# postgresql://postgres:admin@localhost:5432/job?schema=public - local db url
+
+# postgresql://neondb_owner:npg_M5bmKs2FLART@ep-small-wind-a5740lye-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require - live db url
+
+ZEGO_APP_ID=763131272
+ZEGO_APP_SECRET="c104caf295b5132ab9219ea68f74e24b"
+
+# AI Implementation
+
+GEMINI_API_KEY="AIzaSyDG0MMjzLrjIoH2yFtYaFBh4TWSDxfw-YE"
+
+# Firebase
+
+FIREBASE_PROJECT_ID="pocket-cv-37cb1"
+FIREBASE_CLIENT_EMAIL="firebase-adminsdk-fbsvc@pocket-cv-37cb1.iam.gserviceaccount.com"
+FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDRTKmitncyx7ed\nC2ccg4R8llW5tpaLIo3X8I+gGD4FN45xhj5RB6vBk2avaVRl5kGWS/Heyi3zP5gZ\nopoa1ehr0ATmF/wxsApMwyZ96S6PNcFrAeATVl4zFMdol6IlC9p8vND10BMghUga\nq7itbLur4njJ9In1+qgse7z7eOOfX7Mo8+gE4iGVbd5lt9tZc6vtxpLg6Hj1ba7o\nIFTgAfhLInzTNRHUie5YM3v2xJYBDiK4ilpZP7cZFxh5wHP9CZGoZ/LrNci3vmh0\n1/du0FOCciuWqK+tPnzdn7Pg40NVo5/AgOWxCoT0Sl3qJ46IFlhNog4+1oFPqd40\nJHZDdNO5AgMBAAECggEAB4WbgRs3ctrZOMRZcWpk/zwN56c6um33yAw/gfYgRuK4\nwVBQRzkHc+UFJzlM80tdQKmiqMP+XV23OZCg78vC1xqtc/5Meq93dBiW9qZ3NsyS\n33KJTlia+RExm3FiCxyY2EVjtlN2JIPCh1OnLVn/iQ1e4IjKOBqVvOEgXEjh17vk\nzKoO598ODLBW6mwJpH88NxgQ3oTA3zCt+HW5PizPNZAoJvXdljhjgrDqld6o16GQ\n6AD/iGhaB1yztcOj5AEM3BD8GUOP4ZYalu/d/AcB8GzuVowf0iwY3TTIzSzCqCX5\n3uZAMhsKsKk7Eshbpc9OxvryOyjO8+xTDJ07S3VgCQKBgQDs8tyh6s54sc2hjnsA\nZa2wy4DYxaeVO0Z1vrtFuvtOUdS7hRoZmzjnmkDnwgqRCr8LinzxN15iiBRm2S6m\nPg40p7kjHibC2SZ3d3WFq/J2Db852onFabbrnx8MEF9ha5fVTs9+j7e5jRftzxaA\nAAm2q8IVG2CXPJEN76aV08oj3QKBgQDiILG6IFd4RFRcJeF4wcns1nvyMVZH74EJ\n+YGRippdrPwM5djTdIt/r0hAcz2nXorxULEVoqBcm6t2IigKliGgYOFmfCdBkXfN\n1axtk8LFo1dw9cZKt3JTPxWPuN4+qMuVvhQmMSfXHqS70YXaVKSxCP+XFnT04AO9\nyS8NkNevjQKBgQDBDKGrnhX4icyiiuY2DaF0wGjKtEb0M+YVOn9zsYLcbZln6mq4\nYBn9wFSPPi3DvECo0302Pkk89+e/X8U9FqQWTGxvazpjV+6aOQ7cCJqzikG5jg7f\nc2DgGbV+67v6MGH1HY+6ardiiszrKOUJBn7jgI7RCYwpy+PWueE8guBXVQKBgQDh\noJ21ie+9IPDLwUBorXQ9zQV/c5sTy/aFbV/LSPEd5yzX8b+XvgIzNUJyjIpIJh2d\nC1amr84ymWFMTmiFp6eFzyUYjWjeE7fmuf2CmJ0PdxwYqiNhCgoY5iktbtjSzLnW\ngAK62PFXxEu63CUi5LIvszrUFqQ8cglJpSQ99PhBQQKBgQDK/C6Og77eRIxzImyC\nDIzrSSYKTF2ljPtZ9TNPmqltGe8NaV1LVq7Ahk47wgQCg+OKWXa7pnENzlFfb6TG\nwVd9rx9T7o9Vr9LwBBye+spQZ8+5cjoG2P89Edkjr2cuU/JDpsNPAjQyT6I0k8A3\nTATshz0jrIgb8BZNUDgwyesLvA==\n-----END PRIVATE KEY-----\n"
+FIREBASE_STORAGE_BUCKET="pocket-cv-37cb1.appspot.com"
