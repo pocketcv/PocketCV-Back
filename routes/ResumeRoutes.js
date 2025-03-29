@@ -1,6 +1,6 @@
 import express from 'express';
 import multer from 'multer';
-import { uploadResume, getResume } from '../controllers/ResumeController.js';
+import { uploadResume, getResume, downloadResume } from '../controllers/ResumeController.js';
 import { verifyToken } from '../middlewares/AuthMiddleware.js';
 
 const router = express.Router();
@@ -23,6 +23,7 @@ const upload = multer({
 
 // Routes
 router.post('/upload', upload.single('resume'), uploadResume);
-router.get('/', verifyToken, getResume);
+router.get('/', getResume);
+router.post('/download', downloadResume);
 
 export default router;

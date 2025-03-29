@@ -70,15 +70,16 @@ export const registerUser = async (request, response, next) => {
     }
 
     const prisma = getPrismaInstance();
-    await prisma.user.create({
+    let user = await prisma.user.create({
       data: { email, name, phoneNumber, userType, about },
     });
 
-    return response.json({ message: "Success", success: true });
+    return response.json({ message: "Success", success: true, user });
   } catch (error) {
     response.json({
       success:false,
-      message: error.message
+      error: true,
+      message: error.message,
     })
   }
 }

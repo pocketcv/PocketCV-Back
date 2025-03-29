@@ -15,6 +15,15 @@ cloudinary.config({
 
 export const uploadResume = async (req, res) => {
   try {
+    console.log('File uploaded:', req.file);
+    console.log('Body:', req.body);
+    
+    const { userId } = req.body;
+    
+    if (!userId) {
+      return res.status(400).json({ error: 'User ID is required' });
+    }
+
     if (!req.file) {
       return res.status(400).json({ error: 'No file uploaded' });
     }
@@ -22,7 +31,6 @@ export const uploadResume = async (req, res) => {
     console.log('File uploaded:', req.file);
 
     const file = req.file;
-    const userId = 1; // Assuming we have user info from auth middleware
     
     // Create a unique filename
     const timestamp = Date.now();
@@ -39,17 +47,16 @@ export const uploadResume = async (req, res) => {
       format: 'pdf'
     });
 
-    // Update user's resume URL in database using the correct field name 'resume'
+    // Update user's resume URL in the database
     await prisma.user.update({
-      where: { id: userId },
+      where: { id: Number(userId) },
       data: { resume: result.secure_url }
     });
 
     res.status(200).json({
       message: 'Resume uploaded successfully',
-      fileUrl: result.secure_url
+      fileUrl: result.secure_url,
     });
-
   } catch (error) {
     console.error('Error uploading resume:', error);
     res.status(500).json({ 
@@ -58,6 +65,7 @@ export const uploadResume = async (req, res) => {
     });
   }
 };
+
 
 export const getResume = async (req, res) => {
   try {
@@ -75,5 +83,37 @@ export const getResume = async (req, res) => {
   } catch (error) {
     console.error('Error fetching resume:', error);
     res.status(500).json({ error: 'Failed to fetch resume' });
+  }
+};
+
+export const downloadResume = async (req, res) => {
+  try {
+    const userId = req.body?.userId;
+    
+    if (!userId) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { resume: true }
+    });
+
+    if (!user?.resume) {
+      return res.status(404).json({ error: 'No resume found' });
+    }
+
+    // Fetch the file from Cloudinary and stream it to the response
+    const response = await fetch(user.resume);
+    const buffer = await response.arrayBuffer();
+
+    // Set appropriate headers for PDF download
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename=resume.pdf');
+    
+    res.send(Buffer.from(buffer));
+  } catch (error) {
+    console.error('Error downloading resume:', error);
+    res.status(500).json({ error: 'Failed to download resume' });
   }
 };
