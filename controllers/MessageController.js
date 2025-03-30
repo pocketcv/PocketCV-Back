@@ -241,6 +241,10 @@ const geminiModel = googleAi.getGenerativeModel({
 export const askGeminAI = async (req, res, next) => {
   try {
     const prompt = req.body.prompt;
+
+    if (!prompt) {
+      return res.status(400).json({ error: 'Prompt is required' });
+    }
     
     const result = await geminiModel.generateContent({
       contents: [{ role: "user", parts: [{ text: prompt }] }],

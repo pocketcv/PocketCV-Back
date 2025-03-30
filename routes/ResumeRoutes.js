@@ -1,7 +1,6 @@
 import express from 'express';
 import multer from 'multer';
-import { uploadResume, getResume, downloadResume } from '../controllers/ResumeController.js';
-import { verifyToken } from '../middlewares/AuthMiddleware.js';
+import { uploadResume, getResume, downloadResume, getFinalUrl } from '../controllers/ResumeController.js';
 
 const router = express.Router();
 
@@ -9,7 +8,7 @@ const router = express.Router();
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: {
-    fileSize: 5 * 1024 * 1024, // 5MB limit
+    fileSize: 5 * 1024 * 1024,
   },
   fileFilter: (req, file, cb) => {
     // Accept PDF files only
@@ -24,6 +23,7 @@ const upload = multer({
 // Routes
 router.post('/upload', upload.single('resume'), uploadResume);
 router.get('/', getResume);
+router.get("/get-secured", getFinalUrl)
 router.post('/download', downloadResume);
 
 export default router;

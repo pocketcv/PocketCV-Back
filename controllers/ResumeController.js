@@ -13,6 +13,20 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
+export const getFinalUrl = async (req,res) => {
+  try {
+    const url = cloudinary.url("resumes/60_1743341644864_Manish_Resume.pdf", {
+      resource_type: "raw",
+      sign_url: true,
+      expires_at: Math.floor(Date.now() / 1000) + 3600 // Expires in 1 hour
+    });
+
+    return res.status(200).json({ url });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+}
+
 export const uploadResume = async (req, res) => {
   try {
     console.log('File uploaded:', req.file);
@@ -28,11 +42,7 @@ export const uploadResume = async (req, res) => {
       return res.status(400).json({ error: 'No file uploaded' });
     }
 
-    console.log('File uploaded:', req.file);
-
     const file = req.file;
-    
-    // Create a unique filename
     const timestamp = Date.now();
     const fileName = `resumes/${userId}_${timestamp}_${path.basename(file.originalname)}`;
 
@@ -42,9 +52,9 @@ export const uploadResume = async (req, res) => {
 
     // Upload to Cloudinary
     const result = await cloudinary.uploader.upload(dataURI, {
-      resource_type: 'raw',
+      resource_type: 'auto',  // Let Cloudinary detect the file type
       public_id: fileName,
-      format: 'pdf'
+      access_mode: 'public'  // Ensure public access
     });
 
     // Update user's resume URL in the database
@@ -69,7 +79,7 @@ export const uploadResume = async (req, res) => {
 
 export const getResume = async (req, res) => {
   try {
-    const userId = req.user?.id || 1;
+    const userId = req.body?.id;
     const user = await prisma.user.findUnique({
       where: { id: userId },
       select: { resume: true }

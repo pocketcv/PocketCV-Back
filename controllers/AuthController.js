@@ -1,6 +1,24 @@
 import getPrismaInstance from "../utils/PrismaClient.js";
 import { generateToken04 } from "../utils/TokenGenerator.js";
 
+export const userInformation = async (request, response, next) => {
+  try {
+    const { id } = request.params;
+
+    const prisma = getPrismaInstance();
+
+    const user = await prisma.user.findUnique({ where: { id: parseInt(id) } });
+    
+    return response.json({ message: "Success", success: true, user });
+  } catch (error) {
+    return response.json({
+      success: false,
+      error: true,
+      message: error.message
+    })
+  }
+}
+
 export const checkUser = async (request, response, next) => {
   try {
     const { email } = request.body;
@@ -59,8 +77,10 @@ export const registerUser = async (request, response, next) => {
       email,
       name,
       phoneNumber,
-      userType, // Job Seaker , Business
+      userType,
       about = "Available",
+      profilePicture = "",
+      skills = []
     } = request.body;
 
     if (!email || !name) {
@@ -71,7 +91,15 @@ export const registerUser = async (request, response, next) => {
 
     const prisma = getPrismaInstance();
     let user = await prisma.user.create({
-      data: { email, name, phoneNumber, userType, about },
+      data: { 
+        email, 
+        name, 
+        phoneNumber, 
+        userType, 
+        about, 
+        profilePicture,
+        skills 
+      },
     });
 
     return response.json({ message: "Success", success: true, user });
