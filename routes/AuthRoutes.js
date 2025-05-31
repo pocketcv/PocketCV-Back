@@ -8,6 +8,7 @@ import {
   getAllUsers,
   onBoardUser,
   registerUser,
+  updateProfile,
   userInformation,
 } from "../controllers/AuthController.js";
 
@@ -19,5 +20,6 @@ router.post("/register", registerUser);
 router.get("/get-contacts", getAllUsers);
 router.get("/generate-token/:userId", generateToken);
 router.get("/user-info/:id", userInformation);
+router.post("/update-profile", updateProfile);
 
 export default router;

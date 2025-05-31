@@ -147,6 +147,60 @@ export const getAllUsers = async (req, res, next) => {
   }
 };
 
+export const updateProfile = async (request, response, next) => {
+  try {
+    const { email, name, phoneNumber, about, skills, type: userType } = request.body;
+
+    console.log(request);
+
+    if (!email) {
+      return response.json({
+        success: false,
+        message: "Email is required"
+      });
+    }
+
+    const prisma = getPrismaInstance();
+    
+    // First check if user exists
+    const existingUser = await prisma.user.findUnique({
+      where: { email }
+    });
+
+    if (!existingUser) {
+      return response.json({
+        success: false,
+        message: "User not found"
+      });
+    }
+
+    // Update the user
+    const updatedUser = await prisma.user.update({
+      where: { email },
+      data: {
+        name: name || existingUser.name,
+        phoneNumber: phoneNumber || existingUser.phoneNumber,
+        about: about || existingUser.about,
+        skills: skills || existingUser.skills,
+        userType: userType || existingUser.userType
+      }
+    });
+
+    return response.json({
+      success: true,
+      message: "Profile updated successfully",
+      user: updatedUser
+    });
+
+  } catch (error) {
+    return response.json({
+      success: false,
+      error: true,
+      message: error.message
+    });
+  }
+};
+
 export const generateToken = (req, res, next) => {
   try {
     const appID = parseInt(process.env.ZEGO_APP_ID);
